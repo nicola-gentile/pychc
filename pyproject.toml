@@ -5,17 +5,17 @@ description = "PyCHC is a solver-agnostic Python library for the design and cert
 readme = { file = "README.md", content-type = "text/markdown" }
 dependencies = [
     "pysmt",
-    "pip"
+    "pip",
+    "setuptools"
 ]
 
 [dependency-groups]
 dev = [
-    "pytest",
-    "setuptools"
+    "pytest"
 ]
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -24,5 +24,5 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
-testpaths = ["pychc/tests"]
-pythonpath = ["pychc"]
+testpaths = ["tests"]
+pythonpath = ["src"]
