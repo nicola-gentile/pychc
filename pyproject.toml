@@ -1,0 +1,28 @@
+[project]
+name = "pychc"
+version = "0.1.0"
+description = "PyCHC is a solver-agnostic Python library for the design and certified solving of systems of Constrained Horn Clauses (CHC)."
+readme = { file = "README.md", content-type = "text/markdown" }
+dependencies = [
+    "pysmt",
+    "pip"
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "setuptools"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["pychc/tests"]
+pythonpath = ["pychc"]
