@@ -19,8 +19,6 @@ from pysmt.shortcuts import And, Symbol, Equals, Int, Plus, FALSE
 
 import logging
 
-from tests.common import golem_solver, z3_chc_solver
-
 logging.basicConfig(level=logging.DEBUG)
 
 # Create a CHC system
@@ -47,9 +45,9 @@ goal_id = sys.add_clause(goal)
 
 
 # Create a pool of solvers
-spacer_gg = z3_chc_solver(global_guidance=True, name="Z3+GG")
-spacer = z3_chc_solver(global_guidance=False, name="Z3")
-golem_kind = golem_solver(
+spacer_gg = Z3CHCSolver(global_guidance=True, name="Z3+GG")
+spacer = Z3CHCSolver(global_guidance=False, name="Z3")
+golem_kind = GolemSolver(
     proof_format=ProofFormat.ALETHE, name="golem-Kind", engine=GolemEngines.kind
 )
 golem_tpa = GolemSolver(

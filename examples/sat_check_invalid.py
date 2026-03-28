@@ -3,12 +3,13 @@ from pathlib import Path
 from pychc.exceptions import PyCHCInvalidResultException
 from pychc.chc_system import CHCSystem
 
+from pychc.solvers.cvc5 import CVC5Solver
+from pychc.solvers.z3 import Z3CHCSolver
 from pysmt.shortcuts import Symbol, is_valid, Iff
 
 import logging
 
 from pychc.solvers import golem
-from tests.common import cvc5_solver, golem_solver, z3_chc_solver
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -23,7 +24,7 @@ print(
 
 print("*" * 20)
 print("Running Spacer on the file...")
-spacer = z3_chc_solver(global_guidance=True)
+spacer = Z3CHCSolver(global_guidance=True)
 spacer.run(test_file)
 spacer_witness = spacer.get_witness()
 print("Validating witness with CVC5 solver...")
@@ -35,12 +36,12 @@ except PyCHCInvalidResultException as e:
 
 print("*" * 20)
 print("Running Golem solver on the same file...")
-golem = golem_solver(engine=golem.GolemEngines.split_tpa)
+golem = golem.GolemSolver(engine=golem.GolemEngines.split_tpa)
 golem.run(test_file)
 witness_golem = golem.get_witness()
 print("Validating Golem's witness with CVC5 solver...")
 try:
-    sys.validate_sat_model(witness_golem, smt_validator=cvc5_solver())
+    sys.validate_sat_model(witness_golem, smt_validator=CVC5Solver())
     print("Golem's witness is valid!")
 except PyCHCInvalidResultException as e:
     print(f"Validation of witness produced with Golem failed: {e}")
