@@ -29,7 +29,7 @@ spacer.run(test_file)
 spacer_witness = spacer.get_witness()
 print("Validating witness with CVC5 solver...")
 try:
-    sys.validate_sat_model(spacer_witness, smt_validator=cvc5_solver())
+    sys.validate_sat_model(spacer_witness, smt_validator=CVC5Solver())
     print("Spacer's witness is valid!")
 except PyCHCInvalidResultException as e:
     print(f"Validation of witness produced with Spacer failed: {e}")
