@@ -2,11 +2,13 @@ from pathlib import Path
 
 from pychc.exceptions import PyCHCInvalidResultException
 from pychc.chc_system import CHCSystem
-from pychc.solvers import z3, cvc5, golem
 
 from pysmt.shortcuts import Symbol, is_valid, Iff
 
 import logging
+
+from pychc.solvers import golem
+from tests.common import cvc5_solver, golem_solver, z3_chc_solver
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -21,24 +23,24 @@ print(
 
 print("*" * 20)
 print("Running Spacer on the file...")
-spacer = z3.Z3CHCSolver(global_guidance=True)
+spacer = z3_chc_solver(global_guidance=True)
 spacer.run(test_file)
 spacer_witness = spacer.get_witness()
 print("Validating witness with CVC5 solver...")
 try:
-    sys.validate_sat_model(spacer_witness, smt_validator=cvc5.CVC5Solver())
+    sys.validate_sat_model(spacer_witness, smt_validator=cvc5_solver())
     print("Spacer's witness is valid!")
 except PyCHCInvalidResultException as e:
     print(f"Validation of witness produced with Spacer failed: {e}")
 
 print("*" * 20)
 print("Running Golem solver on the same file...")
-golem = golem.GolemSolver(engine=golem.GolemEngines.split_tpa)
+golem = golem_solver(engine=golem.GolemEngines.split_tpa)
 golem.run(test_file)
 witness_golem = golem.get_witness()
 print("Validating Golem's witness with CVC5 solver...")
 try:
-    sys.validate_sat_model(witness_golem, smt_validator=cvc5.CVC5Solver())
+    sys.validate_sat_model(witness_golem, smt_validator=cvc5_solver())
     print("Golem's witness is valid!")
 except PyCHCInvalidResultException as e:
     print(f"Validation of witness produced with Golem failed: {e}")
@@ -62,7 +64,7 @@ for predicate in sys.get_predicates():
             print("Golem and Spacer interpretations match!")
             print(f"Both  : {golem_interp}")
         continue
-    
+
     # n-arity predicates (n > 0)
     golem_vars, golem_body = golem_interp.formal_params, golem_interp.function_body
     spacer_vars, spacer_body = spacer_interp.formal_params, spacer_interp.function_body
