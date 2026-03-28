@@ -180,6 +180,18 @@ Before you setup your enviroment make sure your system provides all the necessar
  - `java` to run eldarica. Recommended java 11 or newer.
 
  ### For uv users
+To install PyCHC as dependency in your project you can add it via cli
+```bash
+uv add "git+https://github.com/usi-verification-and-security/pychc.git"
+```
+or add it to your dependencies
+```
+[project]
+dependencies = [
+  pychc @  git+https://github.com/usi-verification-and-security/pychc.git
+]
+```
+
 Just is a utility tool already integrated in uv, there is no need to install it as third party.
 The above procedure remain the same, but run
 ```
